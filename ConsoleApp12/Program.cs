@@ -1,48 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-namespace ConsoleApp12
+namespace ErtapenemJson
 {
     class Program
     {
         static void Main(string[] args)
         {
 
-            //List<Post> posts = GetPosts();
-            JObject rss =
-                new JObject(
-                    new JProperty("channel",
-                        new JObject(
-                            new JProperty("title", "James Newton-King"),
-                            new JProperty("link", "http://james.newtonking.com"),
-                            new JProperty("description", "James Newton-King's blog."),
-                            new JProperty("item",
-                                new JArray(
-                                    new JObject(
-                                        new JProperty("title", "p.Title"),
-                                        new JProperty("description", "p.Description"),
-                                        new JProperty("link", "p.Link"),
-                                        new JProperty("category",
-                                            new JArray(1, 2, 3
-                                                ))))))));
+            string jsonTextObject = File.ReadAllText(@"..\..\JSON\input_BNF_ertapenem.json");
+            JObject inputErtapenemJson = JObject.Parse(jsonTextObject);
+
+            string inputName = (string)inputErtapenemJson["drugs"][0]["name"];
+            Console.WriteLine(inputName);
 
 
-            Console.WriteLine(rss.ToString());
+            //IList<string> indications = new List<string>() { "Abdominal infections", "Acute gynaecological infections", "Community-acquired pneumonia11"};
+            var indicationsDict= inputErtapenemJson["drugs"][0]["indicationsDose"]["indicationAndDoseGroups"][0]["therapeuticIndications"];
+            Console.WriteLine(indicationsDict);
+
+            var indicationsList = indicationsDict.Select(c => c["indication"]).ToList();
+            foreach (var item in indicationsList)
+            {
+                Console.WriteLine(item);
+            }
+
+            var indications = string.Join(", ", indicationsList);
+            Console.WriteLine(indications);
+
             Console.ReadKey();
-
 
             JObject outputJ =
                 new JObject(
-                    new JProperty("drugs", "ertapenem"),
+                    new JProperty("name", (string)inputErtapenemJson["drugs"][0]["name"]),
                     new JProperty("suggestedDose",
                         new JArray(
                             new JObject(
                                 new JProperty("indications",
-                                    new JArray("Abdominal infections", "Acute gynaecological infections", "Community-acquired pneumonia")),
+                                    //new JArray("Abdominal infections", "Acute gynaecological infections", "Community-acquired pneumonia")),
+                                    indications),
                                 new JProperty("doseAdministrations",
                                     new JArray(
                                         new JObject(
@@ -69,7 +70,7 @@ namespace ConsoleApp12
                                                         new JProperty("flags",
                                                             new JObject(
                                                                 new JProperty("frequency", "1 times daily as a single dose")))),
-                                
+
                                                     new JObject(
                                                         new JProperty("ageBand",
                                                             new JObject(
@@ -120,7 +121,11 @@ namespace ConsoleApp12
                                             new JObject(
                                                 new JProperty("frequency", "1 times daily as a single dose")))))))))))));
 
+
             Console.WriteLine(outputJ.ToString());
+            Console.ReadKey();
+
+            Console.WriteLine("Done");
             Console.ReadKey();
 
         }
