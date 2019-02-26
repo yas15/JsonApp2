@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace ErtapenemJson
@@ -13,6 +14,33 @@ namespace ErtapenemJson
         static void Main(string[] args)
         {
 
+            string jsonTextPath = @"..\..\JSON\input_BNF_ertapenem.json";
+            string json = File.ReadAllText(jsonTextPath);
+
+
+            //using (var reader = new JsonTextReader(new StringReader(json)))
+            //{
+            //    while (reader.Read())
+            //    {
+            //        Console.WriteLine("{0} : {1}", reader.ValueType, reader.Value);
+            //        Console.WriteLine();
+            //    }
+            //}
+
+
+            var reader2 = new JsonTextReader(new StringReader(json));
+            JTokenReader tokenreader = new JTokenReader(JToken.ReadFrom(reader2));
+
+            while (tokenreader.Read())
+            {
+                Console.WriteLine("{0} : {1} : {2}", tokenreader.TokenType, tokenreader.Value, tokenreader.Value);
+            }
+
+
+            Console.ReadKey();
+
+
+
             string jsonTextObject = File.ReadAllText(@"..\..\JSON\input_BNF_ertapenem.json");
             JObject inputErtapenemJson = JObject.Parse(jsonTextObject);
 
@@ -21,7 +49,7 @@ namespace ErtapenemJson
 
 
             //IList<string> indications = new List<string>() { "Abdominal infections", "Acute gynaecological infections", "Community-acquired pneumonia11"};
-            var indicationsDict= inputErtapenemJson["drugs"][0]["indicationsDose"]["indicationAndDoseGroups"][0]["therapeuticIndications"];
+            var indicationsDict = inputErtapenemJson["drugs"][0]["indicationsDose"]["indicationAndDoseGroups"][0]["therapeuticIndications"];
             Console.WriteLine(indicationsDict);
 
             var indicationsList = indicationsDict.Select(c => c["indication"]).ToList();
