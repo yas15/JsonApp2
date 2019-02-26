@@ -37,9 +37,7 @@ namespace ErtapenemJson
                 Console.WriteLine("{0} : {1} : {2}", tokenreader.TokenType, tokenreader.Value, tokenreader.Value);
             }
 
-
-            Console.ReadKey();
-
+            //  Console.ReadKey();
 
 
             string jsonTextObject = File.ReadAllText(@"..\..\JSON\input_BNF_ertapenem.json");
@@ -62,7 +60,7 @@ namespace ErtapenemJson
             var indications = string.Join(", ", indicationsList);
             Console.WriteLine(indications);
 
-            Console.ReadKey();
+            //    Console.ReadKey();
 
             JObject outputJ =
                 new JObject(
@@ -152,44 +150,110 @@ namespace ErtapenemJson
 
 
             Console.WriteLine(outputJ.ToString());
-            Console.ReadKey();
-
-
 
 
             // JsonConvert.DeserializeObject<T>(String)
             // Deserializes a JSON string into a .NET object of type <T>
-            // You will need to define the class <T>
-            var input_BNF_ertapenem = JsonConvert.DeserializeObject<InputErtapenem>(json);
+            var input_BNF_ertapenem = JsonConvert.DeserializeObject<InputBnfDrug>(json);
+
+            Doseadministration doseAdministration = new Doseadministration();
+            doseAdministration.route = input_BNF_ertapenem.drugs[0].indicationsDose
+                .indicationAndDoseGroups[0].routesAndPatientGroups[0].routesOfAdministration[0].routeOfAdministration.Replace("By intravenous infusion", "Intravenous");
+
+            doseAdministration.method = input_BNF_ertapenem.drugs[0].indicationsDose
+                .indicationAndDoseGroups[0].routesAndPatientGroups[0].routesOfAdministration[0].routeOfAdministration.Replace("By intravenous infusion", "Infusion");
 
 
-            var therapeuticIndications = input_BNF_ertapenem.drugs[0].indicationsDose.indicationAndDoseGroups[0].therapeuticIndications;
-            var therapeuticIndicationsList = indicationsDict.Select(c => c["indication"]).ToString().ToList();
+            doseAdministration.doses = new List<Dose>{
+                new Dose {ageBand = new Ageband {
+                    ageLow = new Agelow{
+                        value = Int32.Parse(input_BNF_ertapenem.drugs[0].indicationsDose.indicationAndDoseGroups[0].routesAndPatientGroups[0].patientGroups[0].age.from),
+                        unit = input_BNF_ertapenem.drugs[0].indicationsDose.indicationAndDoseGroups[0].routesAndPatientGroups[0].patientGroups[0].age.fromUnit } ,
+                    ageHigh = new Agehigh{
+                        value = Int32.Parse(input_BNF_ertapenem.drugs[0].indicationsDose.indicationAndDoseGroups[0].routesAndPatientGroups[0].patientGroups[0].age.to),
+                        unit = input_BNF_ertapenem.drugs[0].indicationsDose.indicationAndDoseGroups[0].routesAndPatientGroups[0].patientGroups[0].age.toUnit}},
+
+                    quantity = new Quantity{
+                        value = float.Parse(input_BNF_ertapenem.drugs[0].indicationsDose.indicationAndDoseGroups[0].routesAndPatientGroups[0]
+                        .patientGroups[0].doseStatement.doseInstruction[0].doseQuantity.value),
+                        unit = input_BNF_ertapenem.drugs[0].indicationsDose.indicationAndDoseGroups[0].routesAndPatientGroups[0]
+                        .patientGroups[0].doseStatement.doseInstruction[0].doseQuantity.unit.Replace("gram(s)", "g")},
+
+                    flags = new Flags{
+                        frequency = string.Format("{0} {1}",
+                        input_BNF_ertapenem.drugs[0].indicationsDose.indicationAndDoseGroups[0].routesAndPatientGroups[0]
+                        .patientGroups[0].doseStatement.doseInstruction[0].frequency.value.ToString(),
+                        input_BNF_ertapenem.drugs[0].indicationsDose.indicationAndDoseGroups[0].routesAndPatientGroups[0]
+                        .patientGroups[0].doseStatement.doseInstruction[0].frequency.unit)
+                    } },
 
 
-            Console.ReadKey();
+                new Dose {ageBand = new Ageband { ageLow = new Agelow{value = 13, unit = "year" } , ageHigh = new Agehigh{value = 17, unit = "year"}},
+                quantity = new Quantity{ value = 1.0F, unit = "g"}, flags = new Flags{frequency="12" }} }
+            .ToArray();
 
 
+            Suggesteddose suggesteddose1 = new Suggesteddose();
+            suggesteddose1.indications = input_BNF_ertapenem.drugs[0].indicationsDose.indicationAndDoseGroups[0].therapeuticIndications.Select(c => c.indication).ToArray();
+            suggesteddose1.doseAdministrations = new List<Doseadministration>{
+                new Doseadministration {
+                    route = "Intravenous",
+                    method = "Infusion",
+                    doses = new List<Dose>{new Dose {
+                        ageBand = new Ageband {
+                            ageLow = new Agelow{value = 13, unit = "year" },
+                            ageHigh = new Agehigh{value = 17, unit = "year"}},
+                        quantity = new Quantity{ value = 1.0F, unit = "g"},
+                        flags = new Flags{frequency="12" }},
+                    new Dose {
+                        ageBand = new Ageband {
+                            ageLow = new Agelow{value = 13, unit = "year" },
+                            ageHigh = new Agehigh{value = 17, unit = "year"}},
+                        quantity = new Quantity{ value = 1.0F, unit = "g"},
+                        flags = new Flags{frequency="12" }}
+                    }.ToArray()}}.ToArray();
 
-            Suggesteddose suggesteddose = new Suggesteddose();
-            //suggesteddose.indications = therapeuticIndicationsList;
+
+            Suggesteddose suggesteddose2 = new Suggesteddose();
+            suggesteddose2.indications = input_BNF_ertapenem.drugs[0].indicationsDose.indicationAndDoseGroups[0].therapeuticIndications.Select(c => c.indication).ToArray();
+            suggesteddose2.doseAdministrations = new List<Doseadministration>{
+                new Doseadministration {
+                    route = "Intravenous",
+                    method = "Infusion",
+                    doses = new List<Dose>{new Dose {
+                        ageBand = new Ageband {
+                            ageLow = new Agelow{value = 13, unit = "year" },
+                            ageHigh = new Agehigh{value = 17, unit = "year"}},
+                        quantity = new Quantity{ value = 1.0F, unit = "g"},
+                        flags = new Flags{frequency="12" }}
+                    }.ToArray()}}.ToArray();
 
 
-            Drug drug = new Drug();
-            drug.name = inputName;
-            drug.suggestedDose = new Suggesteddose[] { suggesteddose };
+            OutputBnfDrug outputBnfDrug = new OutputBnfDrug();
+            Drug ertapenem = new Drug();
+            outputBnfDrug.drugs = new List<Drug> { { ertapenem } }.ToArray();
 
 
-            OutputErtapenem outputErtapenem = new OutputErtapenem();
-            outputErtapenem.drugs = new Drug[] { drug };
+            ertapenem.name = input_BNF_ertapenem.drugs[0].name;
+            ertapenem.suggestedDose = new Suggesteddose[] { suggesteddose1, suggesteddose2 };
 
 
+            OutputBnfDrug outputErtapenem = new OutputBnfDrug();
+            outputErtapenem.drugs = new Drug[] { ertapenem };
 
 
+            Console.WriteLine("- Using the JsonSerializer with the Indent settings on");
 
+            JsonSerializer jsonSerializer = new JsonSerializer();
+            jsonSerializer.Formatting = Formatting.Indented;
 
-
-
+            using (StreamWriter sw = new StreamWriter(@"..\..\JSON\test.json"))
+            {
+                using (JsonWriter writer = new JsonTextWriter(sw))
+                {
+                    jsonSerializer.Serialize(writer, outputBnfDrug);
+                }
+            }
 
 
 

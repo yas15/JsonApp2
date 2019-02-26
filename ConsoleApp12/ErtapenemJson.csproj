@@ -46,8 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\InputErtapenem.cs" />
-    <Compile Include="Models\OutputErtapenem.cs" />
+    <Compile Include="Models\InputBnfDrug.cs" />
+    <Compile Include="Models\OutputBnfDrug.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

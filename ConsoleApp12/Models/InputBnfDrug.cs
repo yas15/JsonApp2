@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ErtapenemJson.Models
 {
 
-    public class InputErtapenem
+    public class InputBnfDrug
     {
         public InputDrug[] drugs { get; set; }
     }

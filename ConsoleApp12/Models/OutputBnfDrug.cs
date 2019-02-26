@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ErtapenemJson.Models
 {
 
-    public class OutputErtapenem
+    public class OutputBnfDrug
     {
         public Drug[] drugs { get; set; }
     }
@@ -28,10 +28,10 @@ namespace ErtapenemJson.Models
     {
         public string route { get; set; }
         public string method { get; set; }
-        public Dos[] doses { get; set; }
+        public Dose[] doses { get; set; }
     }
 
-    public class Dos
+    public class Dose
     {
         public Ageband ageBand { get; set; }
         public Quantity quantity { get; set; }
