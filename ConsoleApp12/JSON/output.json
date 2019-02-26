@@ -26,30 +26,30 @@
                     }
                   },
                   "quantity": {
-                    "value": 1.0,
+                    "value": 1,
                     "unit": "g"
                   },
                   "flags": {
-                    "frequency": "12"
+                    "frequency": "1 times daily as a single dose"
                   }
                 },
                 {
                   "ageBand": {
                     "ageLow": {
-                      "value": 13,
-                      "unit": "year"
+                      "value": 3,
+                      "unit": "months"
                     },
                     "ageHigh": {
-                      "value": 17,
+                      "value": 12,
                       "unit": "year"
                     }
                   },
                   "quantity": {
-                    "value": 1.0,
-                    "unit": "g"
+                    "value": 15,
+                    "unit": "mg/kg"
                   },
                   "flags": {
-                    "frequency": "12"
+                    "frequency": "Every 12 hour(s)"
                   }
                 }
               ]
@@ -58,9 +58,7 @@
         },
         {
           "indications": [
-            "Abdominal infections",
-            "Acute gynaecological infections",
-            "Community-acquired pneumonia"
+            "Diabetic foot infections of the skin and soft-tissue"
           ],
           "doseAdministrations": [
             {
@@ -79,11 +77,11 @@
                     }
                   },
                   "quantity": {
-                    "value": 1.0,
+                    "value": 1,
                     "unit": "g"
                   },
                   "flags": {
-                    "frequency": "12"
+                    "frequency": "1 times daily as a single dose"
                   }
                 }
               ]

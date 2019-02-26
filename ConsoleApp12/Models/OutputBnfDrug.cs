@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ErtapenemJson.Models
 {
@@ -58,7 +54,7 @@ namespace ErtapenemJson.Models
 
     public class Quantity
     {
-        public float value { get; set; }
+        public int value { get; set; }
         public string unit { get; set; }
     }
 
