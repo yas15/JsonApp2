@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ErtapenemJson.Models;
 
 namespace ErtapenemJson
 {
@@ -152,6 +153,46 @@ namespace ErtapenemJson
 
             Console.WriteLine(outputJ.ToString());
             Console.ReadKey();
+
+
+
+
+            // JsonConvert.DeserializeObject<T>(String)
+            // Deserializes a JSON string into a .NET object of type <T>
+            // You will need to define the class <T>
+            var input_BNF_ertapenem = JsonConvert.DeserializeObject<InputErtapenem>(json);
+
+
+            var therapeuticIndications = input_BNF_ertapenem.drugs[0].indicationsDose.indicationAndDoseGroups[0].therapeuticIndications;
+            var therapeuticIndicationsList = indicationsDict.Select(c => c["indication"]).ToString().ToList();
+
+
+            Console.ReadKey();
+
+
+
+            Suggesteddose suggesteddose = new Suggesteddose();
+            //suggesteddose.indications = therapeuticIndicationsList;
+
+
+            Drug drug = new Drug();
+            drug.name = inputName;
+            drug.suggestedDose = new Suggesteddose[] { suggesteddose };
+
+
+            OutputErtapenem outputErtapenem = new OutputErtapenem();
+            outputErtapenem.drugs = new Drug[] { drug };
+
+
+
+
+
+
+
+
+
+
+
 
             Console.WriteLine("Done");
             Console.ReadKey();
